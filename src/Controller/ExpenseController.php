@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Expense;
+use App\Entity\ShareGroup;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,21 +16,23 @@ use Symfony\Component\Routing\Annotation\Route;
 class ExpenseController extends BaseController
 {
     /**
-     * @Route("/", name="expense_list", methods="GET")
+     * @Route("/group/{slug}", name="expense_list", methods="GET")
      */
-    public function index(Request $request): Response
+    public function index(ShareGroup $shareGroup): Response
     {
         $exps = $this->getDoctrine()->getRepository(Expense::class)
             ->createQueryBuilder('e')
-            ->select('e', 'ep')
-            ->innerjoin('e.person', 'ep')
+            ->select('e', 'p', 'ps')
+            ->innerjoin('e.person', 'p')
+            ->innerjoin('p.shareGroup', 'ps')
+            ->where('p.shareGroup = :group')
+            ->setParameter(':group', $shareGroup)
             ->getQuery()
             ->getArrayResult();
 
 
-        if ($request->isXMLHttpRequest()) {
             return $this->json($exps);
-        }
+
     }
 
 }

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -36,7 +38,7 @@ class Person
     private $lastname;
 
     /**
-     * @var \ShareGroup
+     * @var ShareGroup
      *
      * @ORM\ManyToOne(targetEntity="ShareGroup")
      * @ORM\JoinColumns({
@@ -44,6 +46,23 @@ class Person
      * })
      */
     private $shareGroup;
+
+    /**
+     * @var  Collection
+     *
+     * @ORM\OneToMany(targetEntity="Expense", mappedBy="person")
+     */
+    private $expenses;
+
+    /**
+     * Person constructor.
+     * @param Collection $expenses
+     */
+    public function __construct(Collection $expenses)
+    {
+        $this->expenses = $expenses;
+    }
+
 
     /**
      * @return int

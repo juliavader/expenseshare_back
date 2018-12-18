@@ -43,7 +43,7 @@ class Expense
     private $createdAt;
 
     /**
-     * @var \Category
+     * @var Category
      *
      * @ORM\ManyToOne(targetEntity="Category")
      * @ORM\JoinColumns({
@@ -53,9 +53,9 @@ class Expense
     private $category;
 
     /**
-     * @var \Person
+     * @var Person
      *
-     * @ORM\ManyToOne(targetEntity="Person")
+     * @ORM\ManyToOne(targetEntity="Person", inversedBy="expenses")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="person_id", referencedColumnName="id")
      * })
@@ -135,7 +135,7 @@ class Expense
     }
 
     /**
-     * @return \Category
+     * @return Category
      */
     public function getCategory(): \Category
     {
@@ -143,28 +143,28 @@ class Expense
     }
 
     /**
-     * @param \Category $category
+     * @param Category $category
      * @return Expense
      */
-    public function setCategory(\Category $category): Expense
+    public function setCategory(Category $category): Expense
     {
         $this->category = $category;
         return $this;
     }
 
     /**
-     * @return \Person
+     * @return Person
      */
-    public function getPerson(): \Person
+    public function getPerson(): Person
     {
         return $this->person;
     }
 
     /**
-     * @param \Person $person
+     * @param Person $person
      * @return Expense
      */
-    public function setPerson(\Person $person): Expense
+    public function setPerson(Person $person): Expense
     {
         $this->person = $person;
         return $this;

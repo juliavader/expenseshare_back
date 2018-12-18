@@ -25,47 +25,37 @@ class ShareGroupController extends BaseController
 {
 
     /**
-     * @Route("/check", name="sharegroup_check", methods="POST")
+     * @Route("/{slug}", name="sharegroup_get", methods="GET")
      */
-    /*
-    public function check(Request $request): Response
+    public function index(ShareGroup $shareGroup )
     {
-        $slug = $request->get('slug');
-        $slug = $request->request->get('slug');
 
-        $sharegroup = $this->getDoctrine()->getRepository(ShareGroup::class)->findOneBySlug($slug);
 
-        if ($request->isXMLHttpRequest()) {
-            return $this->json($sharegroup);
-        }
-    }
-    */
-
-    /**
-     * @Route("/check/{slug}", name="sharegroup_check", methods="GET")
-     */
-    public function check(ShareGroup $sharegroup,Request $request): Response
-    {
-        if ($request->isXMLHttpRequest()) {
-            return $this->json($sharegroup);
-        }
+        return $this->json($this->serialize($shareGroup));
     }
 
     /**
-     * @Route("/", name="sharegroup_list", methods="GET")
+     * @Route("/", name="sharegroup_new", methods="POST")
      */
-    public function index(Request $request): Response
+    public function new(Request $request)
     {
-        $exps = $this->getDoctrine()->getRepository(Person::class)
-            ->createQueryBuilder('p')
-            ->getQuery()
-            ->getArrayResult();
+        $data = $request->getContent();
 
+        $jsonData = json_decode($data, true);
 
-        if ($request->isXMLHttpRequest()) {
-            return $this->json($exps);
-        }
+        $em = $this->getDoctrine()->getManager();
+
+        $sharegroup = new ShareGroup();
+        $sharegroup->setSlug($jsonData["slug"]);
+        $sharegroup->setCreatedAt(new \DateTime());
+        $sharegroup->setClosed(false);
+
+        $em->persist($sharegroup);
+        $em->flush();
+
+        return $this->json($this->serialize($sharegroup));
     }
+
 
 
 }
