@@ -54,13 +54,10 @@ class Person
      */
     private $expenses;
 
-    /**
-     * Person constructor.
-     * @param Collection $expenses
-     */
-    public function __construct(Collection $expenses)
+
+    public function __construct()
     {
-        $this->expenses = $expenses;
+        $this->expenses = new ArrayCollection();
     }
 
 
@@ -113,20 +110,38 @@ class Person
     }
 
     /**
-     * @return \ShareGroup
+     * @return ShareGroup
      */
-    public function getShareGroup(): \ShareGroup
+    public function getShareGroup(): ShareGroup
     {
         return $this->shareGroup;
     }
 
     /**
-     * @param \ShareGroup $shareGroup
+     * @param ShareGroup $shareGroup
      */
-    public function setShareGroup(\ShareGroup $shareGroup): void
+    public function setShareGroup(ShareGroup $shareGroup): void
     {
         $this->shareGroup = $shareGroup;
     }
+
+    /**
+     * @return Collection
+     */
+    public function getExpenses(): ?Collection
+    {
+        return $this->expenses;
+    }
+
+    /**
+     * @param Collection $expenses
+     */
+    public function setExpenses(Collection $expenses): void
+    {
+        $this->expenses = $expenses;
+    }
+
+
 
 
 

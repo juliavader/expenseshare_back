@@ -137,7 +137,7 @@ class Expense
     /**
      * @return Category
      */
-    public function getCategory(): \Category
+    public function getCategory(): Category
     {
         return $this->category;
     }
@@ -146,7 +146,7 @@ class Expense
      * @param Category $category
      * @return Expense
      */
-    public function setCategory(Category $category): Expense
+    public function setCategory(Category $category): ?Expense
     {
         $this->category = $category;
         return $this;
@@ -155,7 +155,7 @@ class Expense
     /**
      * @return Person
      */
-    public function getPerson(): Person
+    public function getPerson(): ?Person
     {
         return $this->person;
     }
@@ -164,7 +164,7 @@ class Expense
      * @param Person $person
      * @return Expense
      */
-    public function setPerson(Person $person): Expense
+    public function setPerson(Person $person): ?Expense
     {
         $this->person = $person;
         return $this;

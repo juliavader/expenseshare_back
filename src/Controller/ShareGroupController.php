@@ -30,8 +30,20 @@ class ShareGroupController extends BaseController
     public function index(ShareGroup $shareGroup )
     {
 
-
         return $this->json($this->serialize($shareGroup));
+    }
+
+
+    /**
+     * @Route("/", name="sharegroup_get", methods="GET")
+     */
+    public function getAllSharedGroup(): Response
+    { $shareGroup = $this->getDoctrine()->getRepository(ShareGroup::class)
+        ->createQueryBuilder('s')
+        ->getQuery()
+        ->getArrayResult();
+
+        return $this->json($shareGroup);
     }
 
     /**
