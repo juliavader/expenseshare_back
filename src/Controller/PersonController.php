@@ -27,6 +27,7 @@ class PersonController extends BaseController
             ->createQueryBuilder('p')
             ->select('p', 'e')
             ->leftJoin('p.expenses', 'e')
+            ->orderBy('p.id', 'DESC')
             ->where('p.shareGroup = :group')
             ->setParameter(':group', $shareGroup)
             ->getQuery()
@@ -39,12 +40,14 @@ class PersonController extends BaseController
 
     /**
      * @return Response
-     * @Route("/", name="Person_All", methods="GET")
+     * @Route("/Group/{slug}", name="Person_All", methods="GET")
      */
-    public function getAllPersons(): Response
+    public function getAllPersons(ShareGroup $shareGroup): Response
     {
         $persons = $this->getDoctrine()->getRepository(Person::class)
             ->createQueryBuilder('p')
+            ->where('p.shareGroup = :group')
+            ->setParameter(':group', $shareGroup)
             ->getQuery()
             ->getArrayResult();
 
@@ -63,7 +66,7 @@ class PersonController extends BaseController
 
         $jsonData = json_decode($data, true);
 
-        $sharedgroup = $this->getDoctrine()->getRepository(ShareGroup::class)->find($jsonData["sharedgroup"]);
+        $sharedgroup = $this->getDoctrine()->getRepository(ShareGroup::class)->findOneBySlug($jsonData["sharedgroup"]);
         $em = $this->getDoctrine()->getManager();
 
         $person = new Person();
@@ -72,13 +75,33 @@ class PersonController extends BaseController
         $person->setShareGroup($sharedgroup);
 
 
-
-
         $em->persist($person);
         $em->flush();
 
         return $this->json($this->serialize($person));
     }
+
+
+    /**
+     * @Route("/", name="person_delete", methods="DELETE")
+     */
+    public function delete(Request $request): Response
+    {
+        $data = $request->getContent();
+
+        $jsonData = json_decode($data, true);
+
+        $person = $this->getDoctrine()->getRepository(Person::class)->find($jsonData["person"]);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($person);
+        $em->flush();
+
+        return $this->json(["ok" => true]);
+
+    }
+
+
 
 
 }

@@ -146,7 +146,7 @@ class Expense
      * @param Category $category
      * @return Expense
      */
-    public function setCategory(Category $category): ?Expense
+    public function setCategory(Category $category): ?  Expense
     {
         $this->category = $category;
         return $this;
